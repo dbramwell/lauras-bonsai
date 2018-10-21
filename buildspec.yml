@@ -3,6 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
+      - npm install -g yarn
       - cd site && yarn
       - cd client && yarn
   build:
