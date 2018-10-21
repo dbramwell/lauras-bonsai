@@ -1,4 +1,4 @@
-service: aws-nodejs
+service: lauras-bonsai
 
 provider:
   name: aws
@@ -13,16 +13,9 @@ provider:
       Resource:
         - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.WATERINGS_TABLE}/*"
 
-plugins:
-- serverless-s3-deploy
-
-custom:
-  assets:
-    targets:
-      - bucket: www.laurasbonsai.co.uk
-        files:
-          - source: client/build/
-
+package:
+  exclude:
+    - client/**
 
 functions:
   getWaterings:

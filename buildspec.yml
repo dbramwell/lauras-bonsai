@@ -10,6 +10,6 @@ phases:
     commands:
       - yarn build
       - cd ..
-      - ./node_modules/.bin/sls s3deploy
+      - aws s3 sync client/build/ s3://www.laurasbonsai.co.uk --delete
       - ./node_modules/.bin/sls deploy
       - aws ssm send-command --instance-ids "mi-0c035321aaf8e76b0" --document-name "AWS-RunShellScript" --comment "IP config" --parameters commands="cd /home/pi && curl https://raw.githubusercontent.com/dbramwell/lauras-bonsai/master/pi/water.py --output water.py" --output text

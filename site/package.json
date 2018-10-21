@@ -4,7 +4,6 @@
   "license": "MIT",
   "devDependencies": {
     "serverless": "^1.32.0",
-    "create-react-app": "^2.0.4",
-    "serverless-s3-deploy": "^0.7.0"
+    "create-react-app": "^2.0.4"
   }
 }
