@@ -1,0 +1,71 @@
+service: aws-nodejs
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorySize: 128
+  environment:
+    WATERINGS_TABLE: waterings
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource:
+        - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.WATERINGS_TABLE}/*"
+
+functions:
+  getWaterings:
+    handler: services/waterings.getWaterings
+    name: getWaterings
+    description: Get a list of past watering times
+    events:
+      - http:
+          method: get
+          path: waterings
+          cors: true
+
+resources:
+  Resources:
+    wateringsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.WATERINGS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: time
+            AttributeType: S
+          - AttributeName: year
+            AttributeType: S
+          - AttributeName: monthYear
+            AttributeType: S
+        KeySchema:
+          - AttributeName: time
+            KeyType: HASH
+          - AttributeName: year
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        GlobalSecondaryIndexes:
+        - IndexName: yearGlobalIndex
+          KeySchema:
+          - AttributeName: year
+            KeyType: HASH
+          Projection:
+            NonKeyAttributes:
+            - time
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: '1'
+            WriteCapacityUnits: '1'
+        - IndexName: monthYearGlobalIndex
+          KeySchema:
+          - AttributeName: monthYear
+            KeyType: HASH
+          Projection:
+            NonKeyAttributes:
+            - time
+            ProjectionType: INCLUDE
+          ProvisionedThroughput:
+            ReadCapacityUnits: '1'
+            WriteCapacityUnits: '1'
+
