@@ -1,0 +1,14 @@
+version: 0.2
+            
+phases:
+  install:
+    commands:
+      - cd site && yarn
+      - cd client && yarn
+  build:
+    commands:
+      - yarn build
+      - cd ..
+      - ./node_modules/.bin/sls s3deploy
+      - ./node_modules/.bin/sls deploy
+      - aws ssm send-command --instance-ids "mi-0c035321aaf8e76b0" --document-name "AWS-RunShellScript" --comment "IP config" --parameters commands="cd /home/pi && curl https://raw.githubusercontent.com/dbramwell/lauras-bonsai/master/pi/water.py --output water.py" --output text
