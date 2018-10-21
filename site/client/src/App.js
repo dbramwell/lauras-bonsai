@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Timeline, TimelineEvent} from 'react-event-timeline'
 import logo from './logo.svg';
 import './App.css';
 
@@ -45,7 +46,21 @@ class App extends Component {
             event.preventDefault()
             this.fetchWaterings()
           }}>Fetch Waterings</a>
-          <p>{JSON.stringify(this.state.data)}</p>
+          {this.state.data ?
+          <div style={{backgroundColor: 'rgba(255,255,255,0.8)', borderRadius: '10px'}}>
+            <Timeline>
+              {this.state.data.Items.sort(function(a, b){
+                var keyA = new Date(a.time),
+                    keyB = new Date(b.time);
+                if(keyA > keyB) return -1;
+                if(keyA < keyB) return 1;
+                return 0;
+              }).map((item) => <TimelineEvent createdAt={item.time} icon={<i />} iconColor="#6fba1c" />)}
+            </Timeline>
+          </div>
+          :
+            null
+          }
         </header>
       </div>
     );
