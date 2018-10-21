@@ -24,3 +24,5 @@ table.put_item(Item={
     'year': str(time.year),
     'monthYear': time.strftime("%B") + ' ' + str(time.year)
 })
+
+print('Success')
