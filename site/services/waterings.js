@@ -46,5 +46,8 @@ exports.getWaterings = async function(event, context, callback) {
 
   const results = await db.query(params).promise()
   console.log(results)
-  callback(null, {statusCode: 200, body: JSON.stringify(results)})
+  callback(null, {statusCode: 200, headers: {
+    'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+    'Access-Control-Allow-Credentials': true // Required for cookies, authorization headers with HTTPS
+  }, body: JSON.stringify(results)})
 }
