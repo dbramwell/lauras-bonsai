@@ -8,7 +8,10 @@ phases:
       - cd client && yarn
   build:
     commands:
+      - yarn lint
+      - yarn testCI
       - yarn build
+      - yarn
       - cd ..
       - aws s3 sync client/build/ s3://www.laurasbonsai.co.uk --delete
       - ./node_modules/.bin/sls deploy
